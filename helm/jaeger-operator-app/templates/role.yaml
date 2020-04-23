@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include "jaeger-operator-app.fullname" . }}
+  name: {{ include "jaeger-operator-app.name" . }}
 rules:
 
 ## our own custom resources

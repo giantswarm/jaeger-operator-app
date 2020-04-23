@@ -3,10 +3,11 @@
 
 replicaCount: 1
 
+nameOverride: jaeger-operator
 image:
   registry: ""
   image: jaegertracing/jaeger-operator
-  tag: 0.17.1
+  tag: 1.17.1
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -21,3 +22,9 @@ resources:
   requests:
     cpu: 200m
     memory: 512Mi
+
+kubectlImage:
+  registry: quay.io
+  name: giantswarm/docker-kubectl
+  tag: 933ac043b7bec33104aac58b16849ea28bace26c
+  pullPolicy: IfNotPresent

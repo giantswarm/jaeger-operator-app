@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "jaeger-operator-app.fullname" . }}
+  name: {{ include "jaeger-operator-app.name" . }}
   labels:
 {{ include "jaeger-operator-app.labels" . | indent 4 }}
 spec:
@@ -18,10 +18,10 @@ spec:
       labels:
 {{ include "jaeger-operator-app.labels" . | indent 8 }}
     spec:
-      serviceAccountName: jaeger-operator
+      serviceAccountName: {{ include "jaeger-operator-app.name" . }}
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.image }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.registry }}{{ .Values.image.image }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
@@ -51,4 +51,4 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: OPERATOR_NAME
-          value: {{ include "jaeger-operator-app.fullname" . }}
+          value: {{ include "jaeger-operator-app.name" . }}
