@@ -11,6 +11,6 @@ and point your browser to:
 http://localhost:16686
 
 {{- if .Values.jaeger.enableIngress }}
-It is also available through Ingress under the name {{ .Values.jaeger.instanceName }}-query
+It is also available through Ingress under the name "{{ .Values.jaeger.instanceName }}-query".
 {{- end }}
 {{- end }}
