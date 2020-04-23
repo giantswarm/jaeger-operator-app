@@ -12,6 +12,11 @@ image:
   tag: 1.17.1
   pullPolicy: IfNotPresent
 
+jaegerImage:
+  registry: ""
+  image: jaegertracing/all-in-one
+  tag: 1.17.1
+
 kubectlImage:
   registry: quay.io
   name: giantswarm/docker-kubectl
@@ -30,3 +35,7 @@ resources:
 # the cluster role has very wide permissions and poses a security risk!
 # Don't enable until you really understand the consequences!
 enableClusterScope: false
+
+deployAllInOneInstance: true
+jaeger:
+  enableDebug: true
