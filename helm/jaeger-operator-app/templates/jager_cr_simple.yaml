@@ -2,11 +2,11 @@
 apiVersion: jaegertracing.io/v1
 kind: "Jaeger"
 metadata:
-  name: "jaeger-all-in-one-{{ include "jaeger-operator-app.fullname" . }}"
+  name: "{{ .Values.jaeger.instanceName }}"
 spec:
   strategy: allInOne
   allInOne:
-    image: "{{ .Values.jaegerImage.registry }}{{ .Values.jaegerImage.image }}:{{ .Values.jaegerImage.tag }}"
+    image: "{{ .Values.jaegerImage.registry }}/{{ .Values.jaegerImage.image }}:{{ .Values.jaegerImage.tag }}"
 {{- if .Values.jaeger.enableDebug }}
     options:
       log-level: debug

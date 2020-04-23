@@ -21,7 +21,7 @@ spec:
       serviceAccountName: {{ include "jaeger-operator-app.name" . }}
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.registry }}{{ .Values.image.image }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.image }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
