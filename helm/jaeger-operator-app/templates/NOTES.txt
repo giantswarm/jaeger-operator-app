@@ -1,1 +1,16 @@
 Your application was installed.
+
+{{- if .Values.deployAllInOneInstance }}
+You requested to deploy a default Jaeger config using the name {{ .Values.jaeger.instanceName }}.
+It's UI is available as the following service: service/{{ .Values.jaeger.instanceName }}-query 
+in namespace {{ .Release.Namespace }} on port 16686.
+
+To access it run:
+kubectl -n {{ .Release.Namespace }} port-forward service/{{ .Values.jaeger.instanceName }}-query 16686:16686
+and point your browser to:
+http://localhost:16686
+
+{{- if .Values.jaeger.enableIngress }}
+It is also available through Ingress under the name {{ .Values.jaeger.instanceName }}-query
+{{- end }}
+{{- end }}
