@@ -1,19 +1,22 @@
 # Default values for opencensus-collector-app.
 # This is a YAML-formatted file.
 
+nameOverride: jaeger-operator
+fullnameOverride: ""
+
 replicaCount: 1
 
-nameOverride: jaeger-operator
 image:
   registry: ""
   image: jaegertracing/jaeger-operator
   tag: 1.17.1
   pullPolicy: IfNotPresent
 
-nameOverride: ""
-fullnameOverride: ""
-
-serviceType: ClusterIP
+kubectlImage:
+  registry: quay.io
+  name: giantswarm/docker-kubectl
+  tag: 933ac043b7bec33104aac58b16849ea28bace26c
+  pullPolicy: IfNotPresent
 
 resources:
   limits:
@@ -23,8 +26,7 @@ resources:
     cpu: 200m
     memory: 512Mi
 
-kubectlImage:
-  registry: quay.io
-  name: giantswarm/docker-kubectl
-  tag: 933ac043b7bec33104aac58b16849ea28bace26c
-  pullPolicy: IfNotPresent
+# Warning: this setting allows to watch for CRDs in any namespace, but currently
+# the cluster role has very wide permissions and poses a security risk!
+# Don't enable until you really understand the consequences!
+enableClusterScope: false
