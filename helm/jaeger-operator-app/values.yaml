@@ -38,5 +38,6 @@ enableClusterScope: false
 
 deployAllInOneInstance: true
 jaeger:
-  enableDebug: true
+  enableDebug: false
+  enableIngress: true
   instanceName: "jaeger-all-in-one-default"

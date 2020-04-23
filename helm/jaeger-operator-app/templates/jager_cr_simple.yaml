@@ -5,6 +5,8 @@ metadata:
   name: "{{ .Values.jaeger.instanceName }}"
 spec:
   strategy: allInOne
+  ingress:
+    enabled: {{ .Values.jaeger.enableIngress }}
   allInOne:
     image: "{{ .Values.jaegerImage.registry }}/{{ .Values.jaegerImage.image }}:{{ .Values.jaegerImage.tag }}"
 {{- if .Values.jaeger.enableDebug }}
