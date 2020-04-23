@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jaeger-operator-app.fullname" . }}
+  labels:
+{{ include "jaeger-operator-app.labels" . | indent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+{{ include "jaeger-operator-app.labels" . | indent 6 }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8383"
+        prometheus.io/scrape: "true"
+      labels:
+{{ include "jaeger-operator-app.labels" . | indent 8 }}
+    spec:
+      serviceAccountName: jaeger-operator
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.image }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+#        livenessProbe:
+#          httpGet:
+#            path: /
+#            port: 8383
+#        readinessProbe:
+#          httpGet:
+#            path: /
+#            port: 8383
+        ports:
+        - containerPort: 8383
+          name: metrics
+        args: ["start"]
+        env:
+        - name: WATCH_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: OPERATOR_NAME
+          value: {{ include "jaeger-operator-app.fullname" . }}

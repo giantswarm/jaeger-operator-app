@@ -1,0 +1,16 @@
+apiVersion: v1
+appVersion: 0.17.1
+#version: [[ .Version ]]
+version: 0.1.1
+name: jaeger-operator-app
+description: |
+  Jaeger operator is a implementation of the operator pattern for installing
+  and managing Jaeger deployments.
+home: https://github.com/jaegertracing/jaeger-operator
+icon: https://raw.githubusercontent.com/giantswarm/jaeger-operator-app/master/img/jaeger-icon.svg
+kubeVersion: ^1.15.0-0
+maintainers:
+- email: hello@giantswarm.io
+  name: Giantswarm Team
+sources:
+- https://github.com/giantswarm/jaeger-operator-app

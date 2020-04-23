@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "jaeger-operator-app.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "jaeger-operator-app.fullname" . }}
+roleRef:
+  kind: Role
+  name: {{ include "jaeger-operator-app.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io

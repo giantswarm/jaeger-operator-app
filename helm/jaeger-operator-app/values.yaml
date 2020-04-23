@@ -1,0 +1,23 @@
+# Default values for opencensus-collector-app.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  registry: ""
+  image: jaegertracing/jaeger-operator
+  tag: 0.17.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceType: ClusterIP
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi

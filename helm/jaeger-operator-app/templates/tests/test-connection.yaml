@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "jaeger-operator-app.fullname" . }}-test-connection"
+  labels:
+{{ include "jaeger-operator-app.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+{{- if .Values.enableOpencensusReceiver }}
+      args:  ['{{ include "jaeger-operator-app.fullname" . }}:{{ .Values.ports.opencensusReceiver }}']
+{{- else if .Values.enableZipkinReceiver }}
+      args:  ['{{ include "jaeger-operator-app.fullname" . }}:{{ .Values.ports.zipkinReceiver }}']
+{{- else if .Values.enableJaegerReceiver }}
+      args:  ['{{ include "jaeger-operator-app.fullname" . }}:{{ .Values.ports.jaegerReceiverTChannel }}']
+{{- end }}
+  restartPolicy: Never
