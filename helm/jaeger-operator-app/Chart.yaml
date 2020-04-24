@@ -13,3 +13,4 @@ maintainers:
   name: Giantswarm Team
 sources:
 - https://github.com/giantswarm/jaeger-operator-app
+- https://raw.githubusercontent.com/giantswarm/jaeger-operator-app/v[[ .Version ]]/README.md
