@@ -33,4 +33,4 @@ helm install -n tracing giantswarm-playground-catalog/jaeger-operator-app
 
 ## Compatibility
 
-Tested on Giant Swarm release 11.0.1 on AWS with Kubernetes 1.16.3
+Tested on Giant Swarm release 11.2.0 on AWS with Kubernetes 1.16.3.
