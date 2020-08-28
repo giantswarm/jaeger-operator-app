@@ -27,7 +27,7 @@ UPSTREAM_VERSION=$(cat ${TMPDIR}/helm-charts-master/charts/jaeger-operator/Chart
 
 cp -a ${TMPDIR}/helm-charts-master/charts/jaeger-operator/* helm/jaeger-operator-app/
 
-git add helm/kong-app/
+git add helm/jaeger-operator-app/
 git commit -m "[upstream-sync] Version ${UPSTREAM_VERSION}"
 git rev-list --no-merges --reverse ${LAST_SYNC_COMMIT}..HEAD~1 -- helm/jaeger-operator-app/ | git cherry-pick -X theirs -n --stdin
 git commit -m "Cherry picked commits ${LAST_SYNC_COMMIT}..HEAD~1"
