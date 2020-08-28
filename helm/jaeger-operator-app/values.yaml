@@ -2,7 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
-  repository: jaegertracing/jaeger-operator
+  registry: quay.io
+  repository: giantswarm/jaeger-operator
   tag: 1.18.0
   pullPolicy: IfNotPresent
   imagePullSecrets: []
@@ -12,13 +13,25 @@ crd:
 
 jaeger:
   # Specifies whether Jaeger instance should be created
-  create: false
-  spec: {}
+  create: true
+  spec:
+    strategy: allInOne
+    ingress:
+      enabled: true
+    allInOne:
+      image: quay.io/giantswarm/jaeger-all-in-one:1.18.0
+    storage:
+      type: memory
+      options:
+        memory:
+          max-traces: 100000
+    ingress:
+      enabled: true
 
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
-  pspEnabled: false
+  pspEnabled: true
   clusterRole: false
 
 serviceAccount:
@@ -28,13 +41,13 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-resources: {}
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
