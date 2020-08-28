@@ -3,25 +3,26 @@
 # jaeger-operator
 
 This chart simply installs [jaeger operator](https://github.com/jaegertracing/jaeger-operator).
+It's based on the official [helm-chart](https://github.com/jaegertracing/helm-charts/tree/master/charts/jaeger-operator)
 
 Jaeger operator can be used to deploy jaegers in different configurations by creating the "Jaeger" CR.
-This chart can be used to deploy a demo Jaeger using the "all-in-one-approach". Check the config options
-below.
 
 ## Configuration
 
-| Option | Default | Decription |
-|--------|---------|------------|
-|deployAllInOneInstance | true | If true, an all-in-one Jaeger will be created using a CR. |
-|jaeger.enableDebug | false | If all-in-one is created, enable debug mode for it. |
-|jaeger.enableIngress | true | If all-in-one is created, enable Ingress object creation. |
-|jaeger.instanceName | "jaeger-all-in-one-default" | If all-in-one is created, use this name for it. |
+This charts [values.yaml](helm/jaeger-operator/values.yaml) contains a default CR config which can be overwritten by providing your own values.yaml when installing the app.
+Examples on how jaeger instances can be configures can be found [here](https://github.com/jaegertracing/jaeger-operator/tree/master/deploy/examples)
+For further documentation visit [the official docs](https://www.jaegertracing.io/docs/1.19/operator/)
+
+Although it's currently not recommended, `jaeger-operator` can be configured with cluster wide access by supplying the following in a custom `values.yaml`:
+```yaml
+  rbac:
+    clusterRole: true
+```
 
 ## Limitations
 
 - can only be deployed once per cluster
-- deployed in "namespace" mode by default; "cluster" mode is supported, but not recommended
-  because of the security implications (check `Chart.yaml` for more info!)
+- deployed in "namespace" mode by default; "cluster" mode is supported, but not recommended because of the security implications (check `Chart.yaml` for more info!)
 
 ## Installation
 
@@ -33,4 +34,4 @@ helm install -n tracing giantswarm-playground-catalog/jaeger-operator-app
 
 ## Compatibility
 
-Tested on Giant Swarm release 11.2.0 on AWS with Kubernetes 1.16.3.
+Tested on Giant Swarm release 12.1.2 on AWS with Kubernetes 1.17.9.
