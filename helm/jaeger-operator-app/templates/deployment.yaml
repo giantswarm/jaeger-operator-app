@@ -1,54 +1,71 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "jaeger-operator-app.name" . }}
+  name: {{ include "jaeger-operator.fullname" . }}
   labels:
-{{ include "jaeger-operator-app.labels" . | indent 4 }}
+{{ include "jaeger-operator.labels" . | indent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-{{ include "jaeger-operator-app.labels" . | indent 6 }}
+{{ include "jaeger-operator.labels" . | indent 6 }}
   template:
     metadata:
-      annotations:
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "8383"
-        prometheus.io/scrape: "true"
+      name: {{ include "jaeger-operator.fullname" . }}
       labels:
-{{ include "jaeger-operator-app.labels" . | indent 8 }}
+{{ include "jaeger-operator.labels" . | indent 8 }}
     spec:
-      serviceAccountName: {{ include "jaeger-operator-app.name" . }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "jaeger-operator.serviceAccountName" . }}
+      {{- end }}
+      {{- with .Values.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+      {{- end }}
+      {{- if and .Values.image.imagePullSecrets (not .Values.serviceAccount.create ) }}
+      imagePullSecrets:
+      {{- range .Values.image.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.registry }}/{{ .Values.image.image }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        resources:
-          {{- toYaml .Values.resources | nindent 12 }}
-#        livenessProbe:
-#          httpGet:
-#            path: /
-#            port: 8383
-#        readinessProbe:
-#          httpGet:
-#            path: /
-#            port: 8383
-        ports:
-        - containerPort: 8383
-          name: metrics
-        args: ["start"]
-        env:
-        - name: WATCH_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: OPERATOR_NAME
-          value: {{ include "jaeger-operator-app.name" . }}
+        - name: {{ include "jaeger-operator.fullname" . }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: 8383
+            name: metrics
+          args: ["start"]
+          env:
+            - name: WATCH_NAMESPACE
+              {{- if .Values.rbac.clusterRole }}
+              value: ""
+              {{- else }}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+              {{- end }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OPERATOR_NAME
+              value: {{ include "jaeger-operator.fullname" . | quote }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

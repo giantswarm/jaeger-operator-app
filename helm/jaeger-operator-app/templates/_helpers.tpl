@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "jaeger-operator-app.name" -}}
+{{- define "jaeger-operator.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "jaeger-operator-app.fullname" -}}
+{{- define "jaeger-operator.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -25,22 +25,24 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
-Create chart name and version as used by the chart label.
+Create the name of the service account to use
 */}}
-{{- define "jaeger-operator-app.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- define "jaeger-operator.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "jaeger-operator.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Common labels
+Create chart name and version as used by the chart label.
 */}}
-{{- define "jaeger-operator-app.labels" -}}
-app.kubernetes.io/name: {{ include "jaeger-operator-app.name" . }}
-app.kubernetes.io/component: jaeger-operator
-helm.sh/chart: {{ include "jaeger-operator-app.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- define "jaeger-operator.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/* Generate basic labels */}}
+{{- define "jaeger-operator.labels" }}
+app.kubernetes.io/name: {{ include "jaeger-operator.name" . }}
+{{- end }}

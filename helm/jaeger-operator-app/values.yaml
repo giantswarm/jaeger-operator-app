@@ -1,43 +1,56 @@
-# Default values for opencensus-collector-app.
+# Default values for jaeger-operator.
 # This is a YAML-formatted file.
-
-nameOverride: jaeger-operator
-fullnameOverride: ""
-
-replicaCount: 1
-
+# Declare variables to be passed into your templates.
 image:
   registry: quay.io
-  image: giantswarm/jaeger-operator
-  tag: 1.17.1
+  repository: giantswarm/jaeger-operator
+  tag: 1.18.0
   pullPolicy: IfNotPresent
+  imagePullSecrets: []
 
-jaegerImage:
-  registry: quay.io
-  image: giantswarm/jaeger-all-in-one
-  tag: 1.17.1
+crd:
+  install: true
 
-kubectlImage:
-  registry: quay.io
-  name: giantswarm/docker-kubectl
-  tag: 933ac043b7bec33104aac58b16849ea28bace26c
-  pullPolicy: IfNotPresent
+jaeger:
+  # Specifies whether Jaeger instance should be created
+  create: true
+  spec:
+    strategy: allInOne
+    ingress:
+      enabled: true
+    allInOne:
+      image: quay.io/giantswarm/jaeger-all-in-one:1.18.0
+    storage:
+      type: memory
+      options:
+        memory:
+          max-traces: 100000
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  pspEnabled: true
+  clusterRole: false
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
 
 resources:
   limits:
-    cpu: 1
-    memory: 2Gi
+    cpu: 100m
+    memory: 128Mi
   requests:
-    cpu: 200m
-    memory: 512Mi
+    cpu: 100m
+    memory: 128Mi
 
-# Warning: this setting allows to watch for CRDs in any namespace, but currently
-# the cluster role has very wide permissions and poses a security risk!
-# Don't enable until you really understand the consequences!
-enableClusterScope: false
+nodeSelector: {}
 
-deployAllInOneInstance: true
-jaeger:
-  enableDebug: false
-  enableIngress: true
-  instanceName: "jaeger-all-in-one-default"
+tolerations: []
+
+affinity: {}
+
+securityContext: {}
