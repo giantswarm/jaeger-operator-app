@@ -1,0 +1,40 @@
+{{- if .Values.collector.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "jaeger-operator.fullname" . }}-admin
+  labels:
+{{ include "jaeger-operator.labels" . | indent 4 }}
+{{- if .Values.collector.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.collector.serviceMonitor.additionalLabels | indent 4 }}
+{{- end }}
+spec:
+  endpoints:
+  - port: admin-http
+    interval: {{ .Values.collector.serviceMonitor.interval }}
+    {{- if .Values.collector.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ .Values.collector.serviceMonitor.scrapeTimeout }}
+    {{- end }}
+    scheme: {{ .Values.collector.serviceMonitor.scheme }}
+    {{- if .Values.collector.serviceMonitor.relabelings }}
+    relabelings:
+    {{ toYaml .Values.collector.serviceMonitor.relabelings | nindent 4 }}
+    {{- end }}
+    {{- if .Values.collector.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+    {{ toYaml .Values.collector.serviceMonitor.metricRelabelings | nindent 4 }}
+    {{- end }}
+  selector:
+    matchLabels:
+    {{ include "jaeger-operator.labels" . | indent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- if .Values.collector.serviceMonitor.targetLabels }}
+  targetLabels:
+{{- range .Values.collector.serviceMonitor.targetLabels }}
+    - {{ . }}
+{{- end }}
+{{- end }}
+  sampleLimit: {{ .Values.collector.serviceMonitor.sampleLimit }}
+{{- end }}

@@ -48,24 +48,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the jaeger-operator chart and their default values.
 
-| Parameter               | Description                                                                                                 | Default                         |
-| :---------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
-| `image.repository`      | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
-| `image.tag`             | Controller container image tag                                                                              | `1.18.0`                        |
-| `image.pullPolicy`      | Controller container image pull policy                                                                      | `IfNotPresent`                  |
-| `jaeger.create`         | Jaeger instance will be created                                                                             | `false`                         |
-| `jaeger.spec`           | Jaeger instance specification                                                                               | `{}`                            |
-| `crd.install`           | CustomResourceDefinition will be installed                                                                  | `true`                          |
-| `rbac.create`           | All required roles and rolebindings will be created                                                         | `true`                          |
-| `serviceAccount.create` | Service account to use                                                                                      | `true`                          |
-| `rbac.pspEnabled`       | Pod security policy for pod will be created and included in rbac role                                       | `false`                         |
-| `rbac.clusterRole`      | ClusterRole will be used by operator ServiceAccount                                                         | `false`                         |
-| `serviceAccount.name`   | Service account name to use. If not set and create is true, a name is generated using the fullname template | `nil`                           |
-| `resources`             | K8s pod resources                                                                                           | `None`                          |
-| `nodeSelector`          | Node labels for pod assignment                                                                              | `{}`                            |
-| `tolerations`           | Toleration labels for pod assignment                                                                        | `[]`                            |
-| `affinity`              | Affinity settings for pod assignment                                                                        | `{}`                            |
-| `securityContext`       | Security context for pod                                                                                    | `{}`                            |
+| Parameter                                    | Description                                                                                                 | Default                         |
+| :------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
+| `image.repository`                           | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
+| `image.tag`                                  | Controller container image tag                                                                              | `1.18.0`                        |
+| `image.pullPolicy`                           | Controller container image pull policy                                                                      | `IfNotPresent`                  |
+| `jaeger.create`                              | Jaeger instance will be created                                                                             | `false`                         |
+| `jaeger.spec`                                | Jaeger instance specification                                                                               | `{}`                            |
+| `crd.install`                                | CustomResourceDefinition will be installed                                                                  | `true`                          |
+| `rbac.create`                                | All required roles and rolebindings will be created                                                         | `true`                          |
+| `serviceAccount.create`                      | Service account to use                                                                                      | `true`                          |
+| `rbac.pspEnabled`                            | Pod security policy for pod will be created and included in rbac role                                       | `false`                         |
+| `rbac.clusterRole`                           | ClusterRole will be used by operator ServiceAccount                                                         | `false`                         |
+| `serviceAccount.name`                        | Service account name to use. If not set and create is true, a name is generated using the fullname template | `nil`                           |
+| `resources`                                  | K8s pod resources                                                                                           | `None`                          |
+| `nodeSelector`                               | Node labels for pod assignment                                                                              | `{}`                            |
+| `tolerations`                                | Toleration labels for pod assignment                                                                        | `[]`                            |
+| `affinity`                                   | Affinity settings for pod assignment                                                                        | `{}`                            |
+| `securityContext`                            | Security context for pod                                                                                    | `{}`                            |
+| `collector.service.enabled`                  | creates the collector service on admin-http port 14269                                                      | `false`                       |
+| `collector.serviceMonitor.enabled`           | creates the corresponding service monitor for collector metrics                                             | `false`                       |
+| `collector.serviceMonitor.additionalLabels`  | additional labels for collector service monitor                                                             | `{}`                            |
+| `collector.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                 | `10s`                           |
+| `collector.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                     | `10s`                           |
+| `collector.serviceMonitor.scheme`            | Scheme to use for scraping                                                                                  | `http`                        |
+| `collector.serviceMonitor.relabelings`       | Relabel configuration for the metrics                                                                       | `[]`                            |
+| `collector.serviceMonitor.targetLabels`      | Set of labels to transfer on the Kubernetes Service onto the target                                         | `[]`                            |
+| `collector.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                   | `[]`                            |
+| `collector.serviceMonitor.sampleLimit`       | Number of samples that will fail the scrape if exceeded                                                     | `[]`                            |
 
 Specify each parameter you'd like to override using a YAML file as described above in the [installation](#installing-the-chart) section.
 

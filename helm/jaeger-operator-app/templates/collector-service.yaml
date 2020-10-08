@@ -1,0 +1,17 @@
+{{- if .Values.collector.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jaeger-operator.fullname" . }}-admin
+  labels:
+{{ include "jaeger-operator.labels" . | indent 4 }} 
+spec:
+  ports:
+  - name: admin-http
+    port: 14269
+    protocol: TCP
+    targetPort: 14269
+  selector:
+    app.kubernetes.io/name: {{ include "jaeger-operator.fullname" . }}-jaeger
+  type: ClusterIP
+{{- end -}}
