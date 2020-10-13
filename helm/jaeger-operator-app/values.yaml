@@ -61,7 +61,7 @@ collector:
     targetLabels: []
     metricRelabelings: []
     sampleLimit: 0
-    
+
 nodeSelector: {}
 
 tolerations: []
