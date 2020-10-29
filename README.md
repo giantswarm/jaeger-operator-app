@@ -9,7 +9,7 @@ Jaeger operator can be used to deploy jaegers in different configurations by cre
 
 ## Configuration
 
-This charts [values.yaml](helm/jaeger-operator/values.yaml) contains a default CR config which can be overwritten by providing your own values.yaml when installing the app.
+This charts [values.yaml](helm/jaeger-operator-app/values.yaml) contains a default CR config which can be overwritten by providing your own values.yaml when installing the app.
 Examples on how jaeger instances can be configures can be found [here](https://github.com/jaegertracing/jaeger-operator/tree/master/deploy/examples)
 For further documentation visit [the official docs](https://www.jaegertracing.io/docs/1.19/operator/)
 
