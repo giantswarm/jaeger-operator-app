@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+- Fixed a wrong URL to the values.yaml file in the README.
+
 ## [0.2.1] - 2020-10-13
 
 ### Added
