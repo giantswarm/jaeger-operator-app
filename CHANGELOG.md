@@ -7,7 +7,13 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
 - Fixed a wrong URL to the values.yaml file in the README.
+
+### Added
+
+- Added a values.schema.json file to help with validating user values.
 
 ## [0.2.1] - 2020-10-13
 
