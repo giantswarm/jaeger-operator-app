@@ -7,6 +7,16 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Updated
+
+- chart version 1.18.0 -> 1.21.2
+- jaeger-all-in-one 1.18.0 -> 1.21.0
+
+### Added
+
+- patch and sync script
+- initial patch
+
 ### Fixed
 
 - Fixed a wrong URL to the values.yaml file in the README.
