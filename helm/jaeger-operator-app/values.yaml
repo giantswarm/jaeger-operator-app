@@ -4,7 +4,7 @@
 image:
   registry: quay.io
   repository: giantswarm/jaeger-operator
-  tag: 1.18.0
+  tag: 1.21.2
   pullPolicy: IfNotPresent
   imagePullSecrets: []
 
@@ -25,11 +25,11 @@ jaeger:
       options:
         memory:
           max-traces: 100000
-
+ 
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
-  pspEnabled: true
+  pspEnabled: false
   clusterRole: false
 
 serviceAccount:
