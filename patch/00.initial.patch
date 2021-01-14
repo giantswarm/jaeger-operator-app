@@ -1,0 +1,417 @@
+diff --git b/README.md a/README.md
+index b43f90b..fdfe95e 100644
+--- b/README.md
++++ a/README.md
+@@ -48,24 +48,34 @@ The command removes all the Kubernetes components associated with the chart and
+ 
+ The following table lists the configurable parameters of the jaeger-operator chart and their default values.
+ 
+-| Parameter               | Description                                                                                                 | Default                         |
+-| :---------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
+-| `image.repository`      | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
+-| `image.tag`             | Controller container image tag                                                                              | `1.20.0`                        |
+-| `image.pullPolicy`      | Controller container image pull policy                                                                      | `IfNotPresent`                  |
+-| `jaeger.create`         | Jaeger instance will be created                                                                             | `false`                         |
+-| `jaeger.spec`           | Jaeger instance specification                                                                               | `{}`                            |
+-| `crd.install`           | CustomResourceDefinition will be installed                                                                  | `true`                          |
+-| `rbac.create`           | All required roles and rolebindings will be created                                                         | `true`                          |
+-| `serviceAccount.create` | Service account to use                                                                                      | `true`                          |
+-| `rbac.pspEnabled`       | Pod security policy for pod will be created and included in rbac role                                       | `false`                         |
+-| `rbac.clusterRole`      | ClusterRole will be used by operator ServiceAccount                                                         | `false`                         |
+-| `serviceAccount.name`   | Service account name to use. If not set and create is true, a name is generated using the fullname template | `nil`                           |
+-| `resources`             | K8s pod resources                                                                                           | `None`                          |
+-| `nodeSelector`          | Node labels for pod assignment                                                                              | `{}`                            |
+-| `tolerations`           | Toleration labels for pod assignment                                                                        | `[]`                            |
+-| `affinity`              | Affinity settings for pod assignment                                                                        | `{}`                            |
+-| `securityContext`       | Security context for pod                                                                                    | `{}`                            |
++| Parameter                                    | Description                                                                                                 | Default                         |
++| :------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
++| `image.repository`                           | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
++| `image.tag`                                  | Controller container image tag                                                                              | `1.20.0`                        |
++| `image.pullPolicy`                           | Controller container image pull policy                                                                      | `IfNotPresent`                  |
++| `jaeger.create`                              | Jaeger instance will be created                                                                             | `false`                         |
++| `jaeger.spec`                                | Jaeger instance specification                                                                               | `{}`                            |
++| `crd.install`                                | CustomResourceDefinition will be installed                                                                  | `true`                          |
++| `rbac.create`                                | All required roles and rolebindings will be created                                                         | `true`                          |
++| `serviceAccount.create`                      | Service account to use                                                                                      | `true`                          |
++| `rbac.pspEnabled`                            | Pod security policy for pod will be created and included in rbac role                                       | `false`                         |
++| `rbac.clusterRole`                           | ClusterRole will be used by operator ServiceAccount                                                         | `false`                         |
++| `serviceAccount.name`                        | Service account name to use. If not set and create is true, a name is generated using the fullname template | `nil`                           |
++| `resources`                                  | K8s pod resources                                                                                           | `None`                          |
++| `nodeSelector`                               | Node labels for pod assignment                                                                              | `{}`                            |
++| `tolerations`                                | Toleration labels for pod assignment                                                                        | `[]`                            |
++| `affinity`                                   | Affinity settings for pod assignment                                                                        | `{}`                            |
++| `securityContext`                            | Security context for pod                                                                                    | `{}`                            |
++| `collector.service.enabled`                  | creates the collector service on admin-http port 14269                                                      | `false`                         |
++| `collector.serviceMonitor.enabled`           | creates the corresponding service monitor for collector metrics                                             | `false`                         |
++| `collector.serviceMonitor.additionalLabels`  | additional labels for collector service monitor                                                             | `{}`                            |
++| `collector.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                 | `10s`                           |
++| `collector.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                     | `10s`                           |
++| `collector.serviceMonitor.scheme`            | Scheme to use for scraping                                                                                  | `http`                          |
++| `collector.serviceMonitor.relabelings`       | Relabel configuration for the metrics                                                                       | `[]`                            |
++| `collector.serviceMonitor.targetLabels`      | Set of labels to transfer on the Kubernetes Service onto the target                                         | `[]`                            |
++| `collector.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                   | `[]`                            |
++| `collector.serviceMonitor.sampleLimit`       | Number of samples that will fail the scrape if exceeded                                                     | `[]`                            |
+ 
+ Specify each parameter you'd like to override using a YAML file as described above in the [installation](#installing-the-chart) section.
+ 
+diff --git b/templates/collector-service-monitor.yaml a/templates/collector-service-monitor.yaml
+new file mode 100644
+index 0000000..b9991c2
+--- /dev/null
++++ a/templates/collector-service-monitor.yaml
+@@ -0,0 +1,40 @@
++{{- if .Values.collector.serviceMonitor.enabled -}}
++apiVersion: monitoring.coreos.com/v1
++kind: ServiceMonitor
++metadata:
++  name: {{ include "jaeger-operator.fullname" . }}-admin
++  labels:
++{{ include "jaeger-operator.labels" . | indent 4 }}
++{{- if .Values.collector.serviceMonitor.additionalLabels }}
++{{ toYaml .Values.collector.serviceMonitor.additionalLabels | indent 4 }}
++{{- end }}
++spec:
++  endpoints:
++  - port: admin-http
++    interval: {{ .Values.collector.serviceMonitor.interval }}
++    {{- if .Values.collector.serviceMonitor.scrapeTimeout }}
++    scrapeTimeout: {{ .Values.collector.serviceMonitor.scrapeTimeout }}
++    {{- end }}
++    scheme: {{ .Values.collector.serviceMonitor.scheme }}
++    {{- if .Values.collector.serviceMonitor.relabelings }}
++    relabelings:
++    {{ toYaml .Values.collector.serviceMonitor.relabelings | nindent 4 }}
++    {{- end }}
++    {{- if .Values.collector.serviceMonitor.metricRelabelings }}
++    metricRelabelings:
++    {{ toYaml .Values.collector.serviceMonitor.metricRelabelings | nindent 4 }}
++    {{- end }}
++  selector:
++    matchLabels:
++    {{ include "jaeger-operator.labels" . | indent 6 }}
++  namespaceSelector:
++    matchNames:
++      - {{ .Release.Namespace }}
++{{- if .Values.collector.serviceMonitor.targetLabels }}
++  targetLabels:
++{{- range .Values.collector.serviceMonitor.targetLabels }}
++    - {{ . }}
++{{- end }}
++{{- end }}
++  sampleLimit: {{ .Values.collector.serviceMonitor.sampleLimit }}
++{{- end }}
+\ No newline at end of file
+diff --git b/templates/collector-service.yaml a/templates/collector-service.yaml
+new file mode 100644
+index 0000000..909dca2
+--- /dev/null
++++ a/templates/collector-service.yaml
+@@ -0,0 +1,17 @@
++{{- if .Values.collector.service.enabled -}}
++apiVersion: v1
++kind: Service
++metadata:
++  name: {{ include "jaeger-operator.fullname" . }}-admin
++  labels:
++{{ include "jaeger-operator.labels" . | indent 4 }} 
++spec:
++  ports:
++  - name: admin-http
++    port: 14269
++    protocol: TCP
++    targetPort: 14269
++  selector:
++    app.kubernetes.io/name: {{ include "jaeger-operator.fullname" . }}-jaeger
++  type: ClusterIP
++{{- end -}}
+diff --git b/templates/deployment.yaml a/templates/deployment.yaml
+index d388dfc..fba7ba7 100644
+--- b/templates/deployment.yaml
++++ a/templates/deployment.yaml
+@@ -30,7 +30,7 @@ spec:
+       {{- end }}
+       containers:
+         - name: {{ include "jaeger-operator.fullname" . }}
+-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
++          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+           imagePullPolicy: {{ .Values.image.pullPolicy }}
+           ports:
+           - containerPort: 8383
+diff --git b/values.schema.json a/values.schema.json
+new file mode 100644
+index 0000000..aecad80
+--- /dev/null
++++ a/values.schema.json
+@@ -0,0 +1,196 @@
++{
++    "$schema": "http://json-schema.org/schema#",
++    "type": "object",
++    "properties": {
++        "affinity": {
++            "type": "object"
++        },
++        "collector": {
++            "type": "object",
++            "properties": {
++                "service": {
++                    "type": "object",
++                    "properties": {
++                        "enabled": {
++                            "type": "boolean"
++                        }
++                    }
++                },
++                "serviceMonitor": {
++                    "type": "object",
++                    "properties": {
++                        "additionalLabels": {
++                            "type": "object"
++                        },
++                        "enabled": {
++                            "type": "boolean"
++                        },
++                        "interval": {
++                            "type": "string"
++                        },
++                        "metricRelabelings": {
++                            "type": "array"
++                        },
++                        "relabelings": {
++                            "type": "array"
++                        },
++                        "sampleLimit": {
++                            "type": "integer"
++                        },
++                        "scheme": {
++                            "type": "string"
++                        },
++                        "scrapeTimeout": {
++                            "type": "string"
++                        },
++                        "targetLabels": {
++                            "type": "array"
++                        }
++                    }
++                }
++            }
++        },
++        "crd": {
++            "type": "object",
++            "properties": {
++                "install": {
++                    "type": "boolean"
++                }
++            }
++        },
++        "image": {
++            "type": "object",
++            "properties": {
++                "imagePullSecrets": {
++                    "type": "array"
++                },
++                "pullPolicy": {
++                    "type": "string"
++                },
++                "registry": {
++                    "type": "string"
++                },
++                "repository": {
++                    "type": "string"
++                },
++                "tag": {
++                    "type": "string"
++                }
++            }
++        },
++        "jaeger": {
++            "type": "object",
++            "properties": {
++                "create": {
++                    "type": "boolean"
++                },
++                "spec": {
++                    "type": "object",
++                    "properties": {
++                        "allInOne": {
++                            "type": "object",
++                            "properties": {
++                                "image": {
++                                    "type": "string"
++                                }
++                            }
++                        },
++                        "ingress": {
++                            "type": "object",
++                            "properties": {
++                                "enabled": {
++                                    "type": "boolean"
++                                }
++                            }
++                        },
++                        "storage": {
++                            "type": "object",
++                            "properties": {
++                                "options": {
++                                    "type": "object",
++                                    "properties": {
++                                        "memory": {
++                                            "type": "object",
++                                            "properties": {
++                                                "max-traces": {
++                                                    "type": "integer"
++                                                }
++                                            }
++                                        }
++                                    }
++                                },
++                                "type": {
++                                    "type": "string"
++                                }
++                            }
++                        },
++                        "strategy": {
++                            "type": "string"
++                        }
++                    }
++                }
++            }
++        },
++        "nodeSelector": {
++            "type": "object"
++        },
++        "rbac": {
++            "type": "object",
++            "properties": {
++                "clusterRole": {
++                    "type": "boolean"
++                },
++                "create": {
++                    "type": "boolean"
++                },
++                "pspEnabled": {
++                    "type": "boolean"
++                }
++            }
++        },
++        "resources": {
++            "type": "object",
++            "properties": {
++                "limits": {
++                    "type": "object",
++                    "properties": {
++                        "cpu": {
++                            "type": "string"
++                        },
++                        "memory": {
++                            "type": "string"
++                        }
++                    }
++                },
++                "requests": {
++                    "type": "object",
++                    "properties": {
++                        "cpu": {
++                            "type": "string"
++                        },
++                        "memory": {
++                            "type": "string"
++                        }
++                    }
++                }
++            }
++        },
++        "securityContext": {
++            "type": "object"
++        },
++        "serviceAccount": {
++            "type": "object",
++            "properties": {
++                "create": {
++                    "type": "boolean"
++                },
++                "name": {
++                    "type": "null"
++                }
++            }
++        },
++        "tolerations": {
++            "type": "array"
++        }
++    }
++}
+diff --git b/values.yaml a/values.yaml
+index 4986a72..ddadcd0 100644
+--- b/values.yaml
++++ a/values.yaml
+@@ -2,8 +2,9 @@
+ # This is a YAML-formatted file.
+ # Declare variables to be passed into your templates.
+ image:
+-  repository: jaegertracing/jaeger-operator
+-  tag: 1.20.0
++  registry: quay.io
++  repository: giantswarm/jaeger-operator
++  tag: 1.21.2
+   pullPolicy: IfNotPresent
+   imagePullSecrets: []
+ 
+@@ -12,9 +13,19 @@ crd:
+ 
+ jaeger:
+   # Specifies whether Jaeger instance should be created
+-  create: false
+-  spec: {}
+-
++  create: true
++  spec:
++    strategy: allInOne
++    ingress:
++      enabled: true
++    allInOne:
++      image: quay.io/giantswarm/jaeger-all-in-one:1.18.0
++    storage:
++      type: memory
++      options:
++        memory:
++          max-traces: 100000
++ 
+ rbac:
+   # Specifies whether RBAC resources should be created
+   create: true
+@@ -28,13 +39,28 @@ serviceAccount:
+   # If not set and create is true, a name is generated using the fullname template
+   name:
+ 
+-resources: {}
+-  # limits:
+-  #  cpu: 100m
+-  #  memory: 128Mi
+-  # requests:
+-  #  cpu: 100m
+-  #  memory: 128Mi
++resources:
++  limits:
++    cpu: 100m
++    memory: 128Mi
++  requests:
++    cpu: 100m
++    memory: 128Mi
++
++# exposes a service and corresponding service monitor for additional metrics via admin-http port 14269
++collector:
++  service:
++    enabled: false
++  serviceMonitor:
++    enabled: false
++    additionalLabels: {}
++    interval: 10s
++    scrapeTimeout: 10s
++    scheme: http
++    relabelings: []
++    targetLabels: []
++    metricRelabelings: []
++    sampleLimit: 0
+ 
+ nodeSelector: {}
+ 
