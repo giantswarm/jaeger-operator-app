@@ -4,7 +4,7 @@
 image:
   registry: quay.io
   repository: giantswarm/jaeger-operator
-  tag: 1.18.0
+  tag: 1.21.2
   pullPolicy: IfNotPresent
   imagePullSecrets: []
 
@@ -19,17 +19,17 @@ jaeger:
     ingress:
       enabled: true
     allInOne:
-      image: quay.io/giantswarm/jaeger-all-in-one:1.18.0
+      image: quay.io/giantswarm/jaeger-all-in-one:1.21.0
     storage:
       type: memory
       options:
         memory:
           max-traces: 100000
-
+ 
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
-  pspEnabled: true
+  pspEnabled: false
   clusterRole: false
 
 serviceAccount:

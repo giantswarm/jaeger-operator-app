@@ -14,7 +14,7 @@ This chart bootstraps a jaeger-operator deployment on a [Kubernetes](http://kube
 
 ## Prerequisites
 
-- Kubernetes 1.8+ with Beta APIs enabled
+- Kubernetes 1.16+
 
 ## Installing the Chart
 
@@ -51,7 +51,7 @@ The following table lists the configurable parameters of the jaeger-operator cha
 | Parameter                                    | Description                                                                                                 | Default                         |
 | :------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
 | `image.repository`                           | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
-| `image.tag`                                  | Controller container image tag                                                                              | `1.18.0`                        |
+| `image.tag`                                  | Controller container image tag                                                                              | `1.20.0`                        |
 | `image.pullPolicy`                           | Controller container image pull policy                                                                      | `IfNotPresent`                  |
 | `jaeger.create`                              | Jaeger instance will be created                                                                             | `false`                         |
 | `jaeger.spec`                                | Jaeger instance specification                                                                               | `{}`                            |
@@ -66,12 +66,12 @@ The following table lists the configurable parameters of the jaeger-operator cha
 | `tolerations`                                | Toleration labels for pod assignment                                                                        | `[]`                            |
 | `affinity`                                   | Affinity settings for pod assignment                                                                        | `{}`                            |
 | `securityContext`                            | Security context for pod                                                                                    | `{}`                            |
-| `collector.service.enabled`                  | creates the collector service on admin-http port 14269                                                      | `false`                       |
-| `collector.serviceMonitor.enabled`           | creates the corresponding service monitor for collector metrics                                             | `false`                       |
+| `collector.service.enabled`                  | creates the collector service on admin-http port 14269                                                      | `false`                         |
+| `collector.serviceMonitor.enabled`           | creates the corresponding service monitor for collector metrics                                             | `false`                         |
 | `collector.serviceMonitor.additionalLabels`  | additional labels for collector service monitor                                                             | `{}`                            |
 | `collector.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                 | `10s`                           |
 | `collector.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                     | `10s`                           |
-| `collector.serviceMonitor.scheme`            | Scheme to use for scraping                                                                                  | `http`                        |
+| `collector.serviceMonitor.scheme`            | Scheme to use for scraping                                                                                  | `http`                          |
 | `collector.serviceMonitor.relabelings`       | Relabel configuration for the metrics                                                                       | `[]`                            |
 | `collector.serviceMonitor.targetLabels`      | Set of labels to transfer on the Kubernetes Service onto the target                                         | `[]`                            |
 | `collector.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                   | `[]`                            |
