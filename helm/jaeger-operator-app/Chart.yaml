@@ -5,7 +5,6 @@ version: [[ .Version ]]
 appVersion: 1.21.2
 home: https://github.com/jaegertracing/jaeger-operator
 icon: https://s.giantswarm.io/app-icons/1/png/jaeger-operator-app-light.png
-source: https://github.com/jaegertracing/jaeger-operator
 maintainers:
   - email: hello@giantswarm.io
     name: Giantswarm Team
@@ -14,5 +13,6 @@ maintainers:
   - email: batazor111@gmail.com
     name: batazor
 sources:
+- https://github.com/jaegertracing/jaeger-operator
 - https://github.com/giantswarm/jaeger-operator-app
 - https://raw.githubusercontent.com/giantswarm/jaeger-operator-app/v[[ .Version ]]/README.md
