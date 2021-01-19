@@ -1,23 +1,17 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@0.11.0
+  architect: giantswarm/architect@1.1.1
 
 workflows:
   package-and-push-chart-on-tag:
     jobs:
-      - architect/run-kat-tests:
-          name: "test with kat jaeger-operator-app chart"
-          chart: "jaeger-operator-app"
-          filters:
-            tags:
-              only: /^v.*/
       - architect/push-to-app-catalog:
-          name: "package and push jaeger-operator-app chart"
-          requires:
-            - "test with kat jaeger-operator-app chart"
+          context: "architect"
+          executor: "app-build-suite"
+          name: "package and push jaeger-operator chart"
           app_catalog: "giantswarm-playground-catalog"
           app_catalog_test: "giantswarm-playground-test-catalog"
-          chart: "jaeger-operator-app"
+          chart: "flux-app"
           # Trigger job on git tag.
           filters:
             tags:
