@@ -25,7 +25,7 @@ jaeger:
       options:
         memory:
           max-traces: 100000
- 
+
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
