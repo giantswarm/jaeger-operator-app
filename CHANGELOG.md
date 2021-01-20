@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.2.2] - 2021-01-20
+
 ### Updated
 
 - chart version 1.18.0 -> 1.21.2
@@ -49,7 +51,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Initial release of jaeger-operator-app chart based on official jaeger-operator chart.
 
-[Unreleased]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/giantswarm/jaeger-operator-app/compare/v0.1.1..v0.1.2
