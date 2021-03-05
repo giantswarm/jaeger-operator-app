@@ -9,6 +9,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [0.2.3] - 2021-02-26
 
+### Updated
+
+- chart version ...
+
 ## [0.2.2] - 2021-01-20
 
 ### Updated
