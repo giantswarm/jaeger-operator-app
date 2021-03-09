@@ -11,7 +11,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Updated
 
-- chart version ...
+- Upstream chart version --> 2.19.1
+
+### Changed
+
+- Collector service to support additionally support distributed deployment configuration
 
 ## [0.2.2] - 2021-01-20
 
