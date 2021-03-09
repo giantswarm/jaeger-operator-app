@@ -11,7 +11,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Updated
 
-- Upstream chart version --> 2.19.1
+- Sync with upstream chart version --> 2.19.1
 
 ### Changed
 
