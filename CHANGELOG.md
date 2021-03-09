@@ -9,6 +9,14 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [0.2.3] - 2021-02-26
 
+### Updated
+
+- Sync with upstream chart version --> 2.19.1
+
+### Changed
+
+- Collector service now supports configuration of distributed deployments
+
 ## [0.2.2] - 2021-01-20
 
 ### Updated
