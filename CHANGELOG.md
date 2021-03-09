@@ -15,7 +15,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Changed
 
-- Collector service to support additionally support distributed deployment configuration
+- Collector service now supports configuration of distributed deployments
 
 ## [0.2.2] - 2021-01-20
 
