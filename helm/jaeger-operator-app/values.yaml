@@ -19,7 +19,7 @@ jaeger:
     ingress:
       enabled: true
     allInOne:
-      image: quay.io/giantswarm/jaeger-all-in-one:1.47.0
+      image: quay.io/giantswarm/jaeger-all-in-one:1.48.0
     storage:
       type: memory
       options:
