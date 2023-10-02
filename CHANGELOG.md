@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Add condition for PSP installation in helm chart.
+
 ## [0.2.3] - 2021-02-26
 
 ### Updated

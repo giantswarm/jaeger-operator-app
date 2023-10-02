@@ -8,6 +8,15 @@ image:
   pullPolicy: IfNotPresent
   imagePullSecrets: []
 
+global:
+  podSecurityStandards:
+    enforced: false
+
+# Enable Kyverno PolicyException
+kyvernoPolicyExceptions:
+  enabled: true
+  namespace: giantswarm
+
 crd:
   install: true
 
