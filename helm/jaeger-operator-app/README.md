@@ -2,6 +2,12 @@
 
 [jaeger-operator](https://github.com/jaegertracing/jaeger-operator) is a Kubernetes operator.
 
+# ⛔️DEPRECATED jaeger-operator-app chart
+
+This is repository is no longer actively maintained or updated.
+
+Instead we recommed using [Grafana Tempo](https://grafana.com/oss/tempo/)
+
 ## Install
 
 ```console

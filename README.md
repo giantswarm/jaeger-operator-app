@@ -1,5 +1,11 @@
 [![CircleCI](https://circleci.com/gh/giantswarm/jaeger-operator-app.svg?style=shield)](https://circleci.com/gh/giantswarm/jaeger-operator-app)
 
+# ⛔️DEPRECATED jaeger-operator-app chart
+
+This is repository is no longer actively maintained or updated.
+
+Instead we recommed using [Grafana Tempo](https://grafana.com/oss/tempo/)
+
 # jaeger-operator
 
 This chart simply installs [jaeger operator](https://github.com/jaegertracing/jaeger-operator).
